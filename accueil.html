@@ -1,37 +1,57 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Site pour trouver un prenom</title>
-  </head>
-  <body>
-    <link rel="stylesheet" href="style.css">
-    <div class="center">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>commits-example</title>
+		<link rel="stylesheet" href="style.css">
+
+	</head>
+	<body>
+		<div id="demo">
+			<!-- <pre>{{prenoms}}</pre> -->
+			<div class="center">
         <h1>Site pour trouver un prenom</h1>
 
         <p>Vous cherchez un prénom, vous voulez une inspiration. Vous êtes au bon endroit.</p>
         
         <input id="searchbar" onkeyup="search_prenoms()" type="text" name="search" placeholder="Rechercher..">
         
-        <div class="nom"id="afficher"></div>
+        <div v-for="prenom in prenoms"class="nom">
+        	{{prenom.name}}
+        </div>
     </div>
+		</div>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://unpkg.com/vue@3"></script>
+		<script>
+			const apiURL =
+				"https://opendata.paris.fr/api/records/1.0/search/?dataset=liste_des_prenoms&q=&facet=sexe&facet=annee&facet=prenoms";
+			const config = {
+			};
 
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script>
-      axios.get('https://opendata.paris.fr/api/records/1.0/search/?dataset=liste_des_prenoms&q=&facet=sexe&facet=annee&facet=prenoms')
-        .then(response => {
-          const data = response.data;
-          const prenoms = data['facet_groups'][2]['facets'];
-          for (const prenom of prenoms) {
-            const li = document.createElement('li');
-            li.innerHTML = prenom['name'];
-            document.getElementById('afficher').appendChild(li);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-            
+			Vue.createApp({
+				data() {
+					return {
+						prenoms: []
+					};
+				},
 
-    </script>
-  </body>
-
+				created: function () {
+					this.fetchDataAsync();
+				},
+				methods: {
+					fetchDataAsync: async function () {
+						try {
+					  	const response = await axios.get(apiURL)
+						  this.prenoms = response.data['facet_groups'][2]['facets']
+						  console.log(prenoms)
+					  } catch(error) {
+					    console.log(error);
+					  }
+					},
+				},
+			}).mount("#demo");
+		</script>
+	</body>
 </html>
