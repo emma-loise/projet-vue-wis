@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>Site pour trouver un prenom</title>
+  </head>
+  <body>
+    <h1>Site pour trouver un prenom</h1>
+    <div id="afficher"></div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      axios.get('https://opendata.paris.fr/api/records/1.0/search/?dataset=liste_des_prenoms&q=&facet=sexe&facet=annee&facet=prenoms')
+        .then(response => {
+          const data = response.data;
+          const prenoms = data['records'];
+          for (const prenom of prenoms) {
+            const li = document.createElement('li');
+            li.innerHTML = prenom['fields'];
+            document.getElementById('afficher').appendChild(li);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    </script>
+  </body>
+
+</html>
