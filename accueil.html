@@ -1,92 +1,37 @@
-<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<title>Ste prénomme</title>
-		<style>
-			
-		</style>
-	</head>
+  <head>
+    <title>Site pour trouver un prenom</title>
+  </head>
+  <body>
+    <link rel="stylesheet" href="style.css">
+    <div class="center">
+        <h1>Site pour trouver un prenom</h1>
 
-	<body>
-    <div id="conteneur">    
-    
-      <h1>Prénomme</h1>
-      <p>Le site pour vous aider à trouver le prénom de votre enfant.</p>
+        <p>Vous cherchez un prénom, vous voulez une inspiration. Vous êtes au bon endroit.</p>
+        
+        <input id="searchbar" onkeyup="search_prenoms()" type="text" name="search" placeholder="Rechercher..">
+        
+        <div class="nom"id="afficher"></div>
     </div>
 
-  <nav>
-    <ul id="menu">
-      <li><a href="#">Etape n°1</a></li>
-      <li><a href="#">Etape n°2</a></li>
-    </ul>
-  </nav>
-		<div id="demo">
-			<!-- <pre>{{commits}}</pre> -->
-			<h1>Prénomme </h1>
-			<p>{{response.data}}</p>
-			
-		</div>
-		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-		<script src="https://unpkg.com/vue@3"></script>
-		
-		<script>
-			const apiURL =
-				"https://opendata.paris.fr/api/records/1.0/search/?dataset=liste_des_prenoms&q=&facet=sexe&facet=annee&facet=prenoms";
-			const config = {
-			};
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      axios.get('https://opendata.paris.fr/api/records/1.0/search/?dataset=liste_des_prenoms&q=&facet=sexe&facet=annee&facet=prenoms')
+        .then(response => {
+          const data = response.data;
+          const prenoms = data['facet_groups'][2]['facets'];
+          for (const prenom of prenoms) {
+            const li = document.createElement('li');
+            li.innerHTML = prenom['name'];
+            document.getElementById('afficher').appendChild(li);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+            
 
-			Vue.createApp({
-				/*data() {
-					return {
-						branches: ["main", "dev"],
-						currentBranch: "main",
-						commits: null,
-					};
-				},*/
+    </script>
+  </body>
 
-				created: function () {
-					this.fetchDataPromise();
-					// this.fetchDataAsync()
-				},
-
-				watch: {
-					currentBranch: "fetchDataPromise", //fetchDataAsync
-				},
-				methods: {
-					fetchDataPromise: function () {
-						const self = this;
-						axios
-							.get(apiURL + self.currentBranch, config)
-							.then(function (response) {
-								console.log(response.data);
-								self.commits = response.data;
-								// console.log(self.commits[0].html_url);
-							})
-							.catch(function (error) {
-								console.log(error);
-							});
-					},
-					// fetchDataAsync: async function () {
-					// 	try {
-					//   	const response = await axios.get(apiURL + this.currentBranch, config)
-					// 	  console.log(response.data)
-					// 	  this.commits = response.data
-					//         // console.log(self.commits[0].html_url);
-					//   } catch(error) {
-					//     console.log(error);
-					//   }
-					// },
-					/*formattedMessage: function (message) {
-						const newline = message.indexOf("\n");
-						return newline > 0 ? message.slice(0, newline) : message;
-					},
-					formattedDate: function (date) {
-						return date.replace(/T|Z/g, " ");
-					},*/
-				},
-			}).mount("#demo");
-		</script>
-	</body>
 </html>
