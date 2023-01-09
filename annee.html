@@ -16,18 +16,22 @@
 
         <p>Vous cherchez un prénom, vous voulez une inspiration. Vous êtes au bon endroit.</p>
 
-		<a href="./date.html">Les prénoms avec occurence</a>
-		<br>
-		<a href="./annee.html">Plus de détails</a>
-		<br>		
-		<input id="searchbar" onkeyup="search_prenoms()" type="text" name="search" placeholder="Rechercher..">
+		<p>Sur cette page plusieurs détails de prénoms</p>
 
-		<div v-for="prenom in prenoms"class="nom">
-			{{prenom.name}}
+		  <div v-for="prenom in prenoms"class="nom">
+            <br>
+            Prénom : {{prenom.fields.prenoms}}
+            <br>
+            Année : {{prenom.fields.annee}} 
+            <br>
+            Sexe : {{prenom.fields.sexe}}
+            <br>
+            Nombre de fois donnée : {{prenom.fields.nombre}}
+            <br>
 		</div>
 		
 
-        
+       
         
         
     </div>
@@ -55,7 +59,7 @@
 					fetchDataAsync: async function () {
 						try {
 					  	const response = await axios.get(apiURL)
-						  this.prenoms = response.data['facet_groups'][2]['facets']
+						  this.prenoms = response.data['records']
 						  console.log(prenoms)
 					  } catch(error) {
 					    console.log(error);

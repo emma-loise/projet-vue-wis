@@ -16,18 +16,14 @@
 
         <p>Vous cherchez un prénom, vous voulez une inspiration. Vous êtes au bon endroit.</p>
 
-		<a href="./date.html">Les prénoms avec occurence</a>
-		<br>
-		<a href="./annee.html">Plus de détails</a>
-		<br>		
-		<input id="searchbar" onkeyup="search_prenoms()" type="text" name="search" placeholder="Rechercher..">
+		<p>Sur cette page le nombre de fois ou le prénom est utilisés</p>
 
-		<div v-for="prenom in prenoms"class="nom">
-			{{prenom.name}}
+		  <div v-for="prenom in prenoms"class="nom">
+			{{prenom.name}} : {{prenom.count}} fois
 		</div>
 		
 
-        
+       
         
         
     </div>
