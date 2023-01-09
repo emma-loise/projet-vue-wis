@@ -1,48 +1,25 @@
-<!DOCTYPE html">
-<html lang="fr">
+<html>
   <head>
-    <meta charset="utf-8" />
-    <title>Site prénomme</title>
+    <title>Facts sur les chats</title>
   </head>
-  
   <body>
-  <div id="conteneur">    
-    
-        <h1>Prénomme</h1>
-        <p>Le site pour vous aider à trouver le prénom de votre enfant.</p>
-      </div>
-      <div id ="myapp"></div>
-
-    
-   <script> src="https://services.mgcloud.fr/dataserver/morbihan-energies/data/VLAN_OD_Prenoms_utf8"  </script> 
-   <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
-   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-   <script type=""text/javascript" src=""adviceapp.js"></script>
-   <script>
-    const myappcomponent = {
-        data(){
-            return {
-                responsedata: {}
-            }
-        },
-        methods:{
-            fetchApi(){
-                console.log("Monted")
-
-            }
-        },
-        mounted(){
-            this.fetchApi()
-
-        }
-    } 
-    const myapp = Vue.createApp(myappcomponent).mount('#myapp')
-
-   </script>
-
-
-
-    <p id="footer">Site crée dans le but d'un cours.</p>
-  </div>
+    <h1>Facts sur les chats</h1>
+    <ul id="facts"></ul>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      axios.get('https://catfact.ninja/facts?limit=10%27')
+        .then(response => {
+          const data = response.data;
+          const facts = data['data'];
+          for (const fact of facts) {
+            const li = document.createElement('li');
+            li.innerHTML = fact['fact'];
+            document.getElementById('facts').appendChild(li);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    </script>
   </body>
 </html>
